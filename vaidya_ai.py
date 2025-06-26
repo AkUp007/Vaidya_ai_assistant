@@ -82,7 +82,6 @@ def main():
                 — Avoid speculation, hallucination, or medical advice outside the scope.
                 — Do NOT add any introductory phrases like "Sure", "Of course", etc.
                 — Format the answer in simple and clear language.
-                — If the context includes sources or references, cite them briefly when relevant.
 
                 ---
 
