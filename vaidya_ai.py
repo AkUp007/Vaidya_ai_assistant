@@ -123,7 +123,7 @@ def main():
         st.markdown("""
             <hr style="margin-top: 40px; margin-bottom: 10px;">
             <p style='text-align: center; font-size: 14px; color: #888;'>
-                ⚙️ Powered by LangChain, TogetherAI & HuggingFace • Built with ❤️ by Akash
+                Built with ❤️ by Mr.Ak
             </p>
         """, unsafe_allow_html=True)
         
