@@ -59,8 +59,8 @@ def set_prompt(custom_prompt):
     return prompt
 
 def main():
-    st.markdown("<h1 style='text-align: center;'>🩺 Vaidy AI Assistant</h1>", unsafe_allow_html=True)
-    st.markdown("<h4 style='text-align: center;'>Your smart companion for instant medical insights and support</h4>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center;'>🩺 Vaidya AI Assistant</h1>", unsafe_allow_html=True)
+    st.markdown("<h5 style='text-align: center;'>Your smart companion for instant medical insights and support</h4>", unsafe_allow_html=True)
     st.markdown("---")
 
     
@@ -113,7 +113,7 @@ def main():
                 response = qa_chain.invoke({"query": prompt})
                 result = response["result"]
                 source_docs = response["source_documents"]
-            res_to_show = result+str(source_docs)
+            res_to_show = result
             st.chat_message('assistant').markdown(res_to_show)
             st.session_state.messages.append({'role':'assistant', 'content':res_to_show})
         except Exception as e:
