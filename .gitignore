@@ -1,0 +1,8 @@
+# Ignore everything
+*
+
+# But allow vectorstore folder and Git config
+!vectorstore/
+!vectorstore/**
+!.gitignore
+!.gitattributes
