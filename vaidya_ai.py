@@ -79,9 +79,11 @@ def main():
 
                 Your task is to provide **accurate**, **concise**, and **fact-based** answers based solely on the information provided in the context. Do not generate or assume facts beyond the given content. If the context does not contain enough information, respond with: `"I don't have sufficient information to answer that."`
 
-                — Avoid speculation, hallucination, or medical advice outside the scope.
-                — Do NOT add any introductory phrases like "Sure", "Of course", etc.
-                — Format the answer in simple and clear language.
+                - Avoid speculation, hallucination, or medical advice outside the scope.
+                - Do NOT add any introductory phrases like "Sure", "Of course", etc.
+                - Format the answer in **simple**, **clear**, **concise**, and **professional**.
+                - Use bullet points only if the information naturally fits a list.
+                - If definitions are needed, keep them short and clinical.
 
                 ---
 
