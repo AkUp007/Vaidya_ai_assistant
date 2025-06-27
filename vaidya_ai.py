@@ -45,7 +45,9 @@ def load_llm():
         temperature=0.7,
         max_tokens=512
     )
-
+def is_greeting(message):
+    greetings = ['hi', 'hello', 'hey', 'good morning', 'good afternoon', 'good evening']
+    return any(greet in message.lower() for greet in greetings)
 
 DB_FAISS_PATH = "vectorstore/db_faiss"
 @st.cache_resource
@@ -69,15 +71,20 @@ def main():
     for message in st.session_state.messages:
         st.chat_message(message['role']).markdown(message['content'])    
     prompt = st.chat_input("Ask anything medical...")
-    
+    #Do not generate or assume facts beyond the given content. If the context does not contain enough information, respond with: `"I don't have sufficient information to answer that."`
     if prompt:
         st.chat_message('user').markdown(prompt)
         st.session_state.messages.append({'role':'user', 'content':prompt})
-        
-        raw_prompt = """
+        if is_greeting(prompt):
+            response = "Hello! 👋 How can I assist you with your medical queries today?"
+            st.chat_message('assistant').markdown(response)
+            st.session_state.messages.append({'role': 'assistant', 'content': response})
+            
+        else:
+            raw_prompt = """
                 You are a highly knowledgeable and trustworthy medical assistant.
 
-                Your task is to provide **accurate**, **concise**, and **fact-based** answers based solely on the information provided in the context. Do not generate or assume facts beyond the given content. If the context does not contain enough information, respond with: `"I don't have sufficient information to answer that."`
+                Your task is to provide **accurate**, **concise**, and **fact-based** answers based solely on the information provided in the context. 
 
                 - Avoid speculation, hallucination, or medical advice outside the scope.
                 - Do NOT add any introductory phrases like "Sure", "Of course", etc.
