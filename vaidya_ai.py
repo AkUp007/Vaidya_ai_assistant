@@ -9,6 +9,8 @@ from langchain_community.vectorstores import FAISS
 
 load_dotenv()
 TOGETHER_API_KEY = st.secrets["TOGETHER_API_KEY"]
+PRIMARY_GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+FALLBACK_GROQ_API_KEY = os.getenv("GROQ_API_key")
 
 # Page configuration
 st.set_page_config(page_title="Vaidy AI Assistant", layout="centered")
@@ -38,16 +40,33 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 def load_llm():
-    return ChatOpenAI(
-        model="mistralai/Mixtral-8x7B-Instruct-v0.1",
-        openai_api_key=TOGETHER_API_KEY,
-        openai_api_base="https://api.together.xyz/v1",
-        temperature=0.7,
-        max_tokens=512
-    )
-def is_greeting(message):
-    greetings = ['hi', 'hello', 'hey', 'good morning', 'good afternoon', 'good evening']
-    return any(greet in message.lower() for greet in greetings)
+    """Attempt to load LLM with GROQ primary key, fallback if needed."""
+    for key in [PRIMARY_GROQ_API_KEY, FALLBACK_GROQ_API_KEY]:
+        if key:
+            try:
+                return ChatOpenAI(
+                    model="llama-3.1-8b-instant", 
+                    openai_api_key=key,
+                    openai_api_base="https://api.groq.com/openai/v1",  
+                    temperature=0.7,
+                    max_tokens=512
+                )
+            except Exception as e:
+                st.warning(f"GROQ API key failed: {e}")
+    st.error("Both GROQ API keys failed or are missing.")
+    return None  # In case both keys fail
+
+# def load_llm():
+#     return ChatOpenAI(
+#         model="mistralai/Mixtral-8x7B-Instruct-v0.1",
+#         openai_api_key=TOGETHER_API_KEY,
+#         openai_api_base="https://api.together.xyz/v1",
+#         temperature=0.7,
+#         max_tokens=512
+#     )
+# def is_greeting(message):
+#     greetings = ['hi', 'hello', 'hey', 'good morning', 'good afternoon', 'good evening']
+#     return any(greet in message.lower() for greet in greetings)
 
 DB_FAISS_PATH = "vectorstore/db_faiss"
 @st.cache_resource
@@ -75,31 +94,28 @@ def main():
     if prompt:
         st.chat_message('user').markdown(prompt)
         st.session_state.messages.append({'role':'user', 'content':prompt})
-        if is_greeting(prompt):
-            response = "Hello! 👋 How can I assist you with your medical queries today?"
-            st.chat_message('assistant').markdown(response)
-            st.session_state.messages.append({'role': 'assistant', 'content': response})
+        # if is_greeting(prompt):
+        #     response = "Hello! 👋 How can I assist you with your medical queries today?"
+        #     st.chat_message('assistant').markdown(response)
+        #     st.session_state.messages.append({'role': 'assistant', 'content': response})
             
-        else:
-            raw_prompt = """
-                You are Vaidya, a highly knowledgeable, trustworthy, and polite medical assistant.
+        # else:
+        raw_prompt = """
+            You are a compassionate, knowledgeable, and trustworthy medical assistant, like a kind doctor speaking directly to the patient.
+                Your role is to give **accurate**, **polite**, and **helpful** medical answers based on the provided context, and to communicate in a way the patient feels understood and cared for.
 
-                Your task is to provide **accurate**, **concise**, and **fact-based** answers based solely on the information provided in the context. Do not generate or assume facts beyond the given content.
-                
-                If the context does not contain enough information to answer the question:
-                - Respond gently, politely, and in a **human-like, empathetic manner**. 
-                - Kindly inform the user: `"I don't have sufficient information to answer that. Please consult a qualified medical professional for personalised guidance."`
-                
-                For irrelevant or non-medical questions:
-                - Respond politely and humbly, saying: `"I am designed to assist with medical queries. Could you please ask me a medical-related question?"`
-
-                Guidelines:
-                - Avoid speculation, hallucination, or medical advice outside the scope.
-                - Do NOT add any introductory phrases like "Sure", "Of course", etc.
-                - Format the answer in **simple**, **clear**, **concise**, and **professional**.
-                - Use bullet points only if the information naturally fits a list.
-                - If definitions are needed, keep them short and clinical.
-                - Maintain an empathetic and respectful tone in every response.
+                — Always respond in a warm, polite, and respectful tone, similar to how a doctor calmly explains to a patient.
+                - Your task is to provide **accurate**, **concise**, and **fact-based** answers based solely on the information provided in the context.
+                — If the patient's question is in Hindi, respond entirely in Hindi.
+                — If it's in English, respond in English.
+                — If the question is mixed (Hinglish), respond in **natural Hinglish** — use a friendly, simple mix of Hindi and English, like how people speak in daily conversation (e.g., "aapko rest lena chahiye", "you should consult a doctor immediately", etc.).
+                — Always answer every question to the best of your ability, using only the given context only.
+                — Avoid robotic or overly formal tone — sound like a real, kind doctor.
+                — Always try to help. If the context lacks full information, respond gently and share basic, widely accepted medical guidance.
+                — Do NOT generate facts beyond the provided context unless they are basic, well-established medical facts.
+                — Never hallucinate or speculate.
+                — **Format your answers in short, clear, point-wise or numbered format**, so the patient can easily follow.
+                — If sources are mentioned in the context, refer to them briefly and respectfully.
 
                 ---
 
