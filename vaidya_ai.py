@@ -130,27 +130,27 @@ def main():
                 Final Answer:
                 """
 
-            try:
-                vectorstore = get_vectorstore()
-                if vectorstore is None:
-                    st.error("Failed to load the vectorstore")
-                qa_chain = RetrievalQA.from_chain_type(
-                    llm = load_llm(),
-                    chain_type = "stuff",
-                    retriever = vectorstore.as_retriever(search_kwargs = {'k':3}),
-                    return_source_documents = True,
-                    chain_type_kwargs =  {'prompt':set_prompt(raw_prompt) }
-                )
-            
-                with st.spinner("Thinking..."):
-                    response = qa_chain.invoke({"query": prompt})
-                    result = response["result"]
-                    source_docs = response["source_documents"]
-                res_to_show = result
-                st.chat_message('assistant').markdown(res_to_show)
-                st.session_state.messages.append({'role':'assistant', 'content':res_to_show})
-            except Exception as e:
-                st.error(f"⚠️ Something went wrong: {e}")
+        try:
+            vectorstore = get_vectorstore()
+            if vectorstore is None:
+                st.error("Failed to load the vectorstore")
+            qa_chain = RetrievalQA.from_chain_type(
+                llm = load_llm(),
+                chain_type = "stuff",
+                retriever = vectorstore.as_retriever(search_kwargs = {'k':3}),
+                return_source_documents = True,
+                chain_type_kwargs =  {'prompt':set_prompt(raw_prompt) }
+            )
+        
+            with st.spinner("Thinking..."):
+                response = qa_chain.invoke({"query": prompt})
+                result = response["result"]
+                source_docs = response["source_documents"]
+            res_to_show = result
+            st.chat_message('assistant').markdown(res_to_show)
+            st.session_state.messages.append({'role':'assistant', 'content':res_to_show})
+        except Exception as e:
+            st.error(f"⚠️ Something went wrong: {e}")
             
     # --- Footer section (Place this at the end) ---
         st.markdown("""
