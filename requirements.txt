@@ -9,3 +9,14 @@ sentence_transformers
 openai 
 langchain-community
 langchain_openai
+openai-whisper
+ffmpeg-python
+streamlit-audiorec
+fastapi
+pymongo
+passlib[bcrypt]
+python-jose
+python-multipart
+"uvicorn[standard]"
+
+
