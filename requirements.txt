@@ -18,6 +18,7 @@ python-jose
 python-multipart
 uvicorn[standard]
 gunicorn
+pydantic
 
 
 
