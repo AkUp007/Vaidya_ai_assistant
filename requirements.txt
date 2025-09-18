@@ -9,7 +9,6 @@ sentence_transformers
 openai 
 langchain-community
 langchain_openai
-openai-whisper
 ffmpeg-python
 streamlit-audiorec
 fastapi
@@ -18,6 +17,7 @@ passlib[bcrypt]
 python-jose
 python-multipart
 uvicorn[standard]
+
 
 
 
