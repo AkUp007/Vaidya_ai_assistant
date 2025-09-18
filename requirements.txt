@@ -17,6 +17,7 @@ passlib[bcrypt]
 python-jose
 python-multipart
 uvicorn[standard]
+gunicorn
 
 
 
