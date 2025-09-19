@@ -15,9 +15,10 @@ pymongo
 passlib[bcrypt]
 python-jose
 python-multipart
-uvicorn[standard]==0.30.1
-gunicorn==21.2.0
+uvicorn[standard]
+gunicorn
 pydantic
+
 
 
 
