@@ -18,8 +18,6 @@ from contextlib import asynccontextmanager
 from bson.objectid import ObjectId
 load_dotenv()
 
-app = FastAPI(title="VaidyAI API")
-
 # --- Helper function to load LLM ---
 def load_llm():
     """Attempt to load LLM with GROQ primary key, fallback if needed."""
@@ -66,9 +64,9 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
 # --- AI Setup ---
 qa_chain = None
 
-# @asynccontextmanager
-@app.on_event("startup")
-def load_resources():
+@asynccontextmanager
+# @app.on_event("startup")
+async def lifespan(app: FastAPI):
     global qa_chain
     try:
         llm = load_llm()
@@ -118,6 +116,11 @@ def load_resources():
         print("✅ RAG chain with compassionate doctor prompt loaded successfully!")
     except Exception as e:
         print(f"❌ Failed to load RAG chain: {e}")
+        
+    yield  
+
+app = FastAPI(title="VaidyAI API", lifespan=lifespan)
+
 
 # --- API Endpoints ---
 @app.get("/")
@@ -206,4 +209,5 @@ def delete_conversation(conversation_id: str, current_user: dict = Depends(get_c
 #             raise HTTPException(status_code=404, detail="Conversation not found")
 #         return {"message": "Messages cleared successfully"}
 #     except Exception as e:
+
 #         raise HTTPException(status_code=400, detail=f"Invalid conversation ID: {e}")    
