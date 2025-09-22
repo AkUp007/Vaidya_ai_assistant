@@ -55,3 +55,87 @@ Follow these instructions to set up and run the VaidyAI assistant on your local 
 ```bash
 git clone [https://github.com/your-username/Vaidya_ai_assistant.git](https://github.com/your-username/Vaidya_ai_assistant.git)
 cd Vaidya_ai_assistant
+```
+
+#### **2️⃣ Create a Virtual Environment**
+
+```bash
+python -m venv venv
+# On macOS/Linux:
+source venv/bin/activate
+# On Windows:
+venv\Scripts\activate
+```
+
+#### **3️⃣ Install Dependencies**
+Install all the required packages from the `requirements.txt` file.
+
+```bash
+pip install -r requirements.txt
+```
+
+#### **4️⃣ Set up Environment Variables**
+Create a `.env` file in the root directory of the project and add the following keys. This file stores your secret credentials secure
+```bash
+# .env file
+
+# MongoDB Connection
+MONGO_URI="your_mongodb_connection_string"
+
+# Groq LLM API Key
+PRIMARY_GROQ_API_KEY="your_groq_api_key"
+
+# JWT Authentication
+JWT_SECRET_KEY="a_very_strong_and_secret_key_for_jwt"
+JWT_ALGORITHM="HS256"
+```
+### **⚙️ How to Run the Application**
+The application consists of two separate services that must be run concurrently: the backend and the frontend.
+
+#### **1️⃣ Start the FastAPI Backend**
+Open a terminal, activate your virtual environment, and run the following command:
+
+```bash
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+```
+The `--reload` flag automatically restarts the server when you make changes to the code. The API will be accessible at `http://127.0.0.1:8000`.
+
+#### **2️⃣ Start the Streamlit Frontend
+**
+Open a second terminal, activate the same virtual environment, and run:
+
+```bash
+streamlit run app.py
+```
+Your browser should automatically open a new tab with the VaidyAI chat interface. If not, you can access it at `http://localhost:8501`.
+You can now register a new user, log in, and start chatting!
+
+### **📂 Project Structure**
+
+```graphql
+Vaidya_ai_assistant/
+├── main.py             # FastAPI backend: API endpoints, RAG chain setup
+├── app.py              # Streamlit frontend: UI, chat interface, API calls
+├── db.py               # MongoDB connection, CRUD functions for users/conversations
+├── auth.py             # JWT token creation/verification, password hashing
+├── requirements.txt    # List of all Python dependencies
+├── .env                # Secret keys and configuration (user-created)
+└── vectorstore/
+    └── db_faiss/       # Directory containing the pre-built FAISS index
+```
+
+### **🤝 Contributing**
+
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
+- Fork the Project
+- Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+- Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+- Push to the Branch (`git push origin feature/AmazingFeature`)
+- Open a Pull Request
+
+### **📜 License**
+This project is licensed under the `MIT License`. See the `LICENSE` file for more information.
+
+### **🙌 Acknowledgments**
+- Thanks to the teams behind LangChain, FastAPI, and Streamlit for their incredible open-source tools.
+- Powered by the high-speed inference of Groq.
