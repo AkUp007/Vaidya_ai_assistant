@@ -100,8 +100,7 @@ uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
 The `--reload` flag automatically restarts the server when you make changes to the code. The API will be accessible at `http://127.0.0.1:8000`.
 
-#### **2️⃣ Start the Streamlit Frontend
-**
+#### **2️⃣ Start the Streamlit Frontend**
 Open a second terminal, activate the same virtual environment, and run:
 
 ```bash
